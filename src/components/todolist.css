@@ -1,0 +1,113 @@
+.ToDoList {
+    .filters {        
+        input {
+            display: none;
+        }
+
+        input[type="radio"] + span {
+            border: none;
+            padding: 5px 10px;
+            margin: 1rem 0;
+            margin-right: 1rem;
+            border-radius: 50px;
+            background-color: #F7D87D;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            transition: .5s;
+    
+            &:hover {
+                background-color: #ED7500;
+            }
+        }
+
+        input[type="radio"]:checked + span {
+            background-color: #ED7500;
+        }
+    }
+
+    form {
+        margin-top: 2em;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        input {
+            border: none;
+
+            &:focus-visible {
+                outline: none;
+            }
+        }
+
+        button {
+            background-color: #000;
+            border-radius: 50px;
+            color: #fff;
+            font-weight: bold;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.5s;
+
+            &:hover {
+                background-color: #fff;
+                color: #000;
+            }
+        }
+    }
+
+    .emptyMessage {
+        color: #dddddd;
+        text-align: center;
+    }
+
+    .tasks {
+        padding: 0;
+        margin: 3rem 0;
+        list-style-type: none;
+        max-height: 40vh;
+        overflow: auto;
+
+        li {
+            border-bottom: 1px solid #dddddd;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: .5s;
+
+                &:hover {
+                    color: #fd3838;
+                }
+            }
+        }
+    }
+}
+
+.checkbox-round {
+    width: 1.3em;
+    height: 1.3em;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #3b3a3a;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    margin-right: 1rem;
+
+    &:hover {
+        transition: .5s;
+    }
+}
+
+.checkbox-round:checked {
+    background-color: #3b3a3a;
+}
