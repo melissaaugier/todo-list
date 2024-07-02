@@ -9,6 +9,8 @@ function ToDoList() {
     const [filter, setFilter] = useState('all');
     const [lastIndex, setLastIndex] = useState(0);
     const [displayTasks, setDisplayTasks] = useState([]);
+    const [editIndex, setEditIndex] = useState(null);
+    const [editText, setEditText] = useState('');
 
     useEffect(() => {
         const filteredTasks = tasks.filter((task) => {
@@ -42,6 +44,26 @@ function ToDoList() {
         setTasks(updatedTasks);
     };
 
+    const handleEditClick = (index) => {
+        const taskEdit = tasks.find((task) => task.index === index )
+        setEditIndex(taskEdit.index);
+        setEditText(taskEdit.text);
+    };
+
+    const handleSaveEdit = (index) => {
+        const updatedTasks = tasks.map(task => 
+            task.index === index ? { ...task, text: editText} : task 
+        );
+
+        setTasks(updatedTasks);
+        setEditIndex(null);
+    };
+
+    const handleCancelEdit = (index) => {
+        setEditIndex(null);
+    };
+
+
     return (
         <div className="ToDoList">
             <h1>To Do List</h1>
@@ -72,19 +94,39 @@ function ToDoList() {
                                 timeout={500}
                                 classNames="item"
                             >
-                                <li>
-                                    <label>
-                                        <input
-                                            type='checkbox'
-                                            checked={task.completed}
-                                            className="checkbox-round"
-                                            value={task.text}
-                                            onChange={() => handleCompletedTask(task.index)}
-                                        />
-                                        {task.text}
-                                    </label>
-                                    <button onClick={() => handleRemoveTask(task.index)}>&#10005;</button>
-                                </li>
+                                { task.index === editIndex ? (
+                                    <li>
+                                        <label>
+                                            <input
+                                                type='checkbox'
+                                                checked={task.completed}
+                                                className="checkbox-round"
+                                                onChange={() => handleCompletedTask(task.index)}
+                                            />
+                                            <input type='text' value={editText} autoFocus onChange={(e) => setEditText(e.target.value)}/>
+                                        </label>
+                                        <div>
+                                            <button className='btn-green' onClick={() => handleSaveEdit(task.index)}>Save</button>
+                                            <button className='btn-red' onClick={() => handleCancelEdit()}>Cancel</button>
+                                        </div>
+                                    </li>
+                                ) : (
+                                    <li>
+                                        <label>
+                                            <input
+                                                type='checkbox'
+                                                checked={task.completed}
+                                                className="checkbox-round"
+                                                onChange={() => handleCompletedTask(task.index)}
+                                            />
+                                            {task.text}
+                                        </label>
+                                        <div>
+                                            <button className='btn-yellow' onClick={() => handleEditClick(task.index)}>&#9998;</button>
+                                            <button className='btn-red' onClick={() => handleRemoveTask(task.index)}>&#10005;</button>
+                                        </div>
+                                    </li>
+                                )}
                             </CSSTransition>
                         ))}
                     </TransitionGroup>

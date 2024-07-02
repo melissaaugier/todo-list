@@ -76,15 +76,40 @@
             justify-content: space-between;
             align-items: center;
 
+            input[type=text] {
+                border: none;
+                padding: 0;
+                font-size: 1rem;
+
+                &:focus-visible {
+                    outline: none;
+                }
+            }
+
             button {
                 background: none;
                 border: none;
                 cursor: pointer;
                 font-size: 1rem;
                 transition: .5s;
+                color:#a1a1a1;
 
-                &:hover {
-                    color: #fd3838;
+                &.btn-green {
+                    &:hover {
+                        color: #5ee98c;
+                    }
+                }
+
+                &.btn-yellow {
+                    &:hover {
+                        color: #F9B10A;
+                    }
+                }
+
+                &.btn-red {
+                    &:hover {
+                        color: #fd3838;
+                    }
                 }
             }
         }
