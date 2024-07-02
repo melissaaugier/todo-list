@@ -65,8 +65,9 @@
         padding: 0;
         margin: 3rem 0;
         list-style-type: none;
-        max-height: 40vh;
+        height: 30vh;
         overflow: auto;
+
 
         li {
             border-bottom: 1px solid #dddddd;
@@ -110,4 +111,26 @@
 
 .checkbox-round:checked {
     background-color: #3b3a3a;
+}
+
+.todo-list .item-enter {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.todo-list .item-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms, transform 500ms;
+}
+
+.todo-list .item-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.todo-list .item-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 500ms, transform 500ms;
 }

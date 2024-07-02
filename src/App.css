@@ -5,3 +5,9 @@
   width: 30vw;
   margin: 1rem;
 }
+
+@media (max-width: 768px) {
+  .App {
+    width: unset;
+  }
+}

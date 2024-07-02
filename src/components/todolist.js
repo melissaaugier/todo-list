@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './todolist.css';
 
@@ -7,11 +8,21 @@ function ToDoList() {
     const [newTask, setNewTask] = useState('');
     const [filter, setFilter] = useState('all');
     const [lastIndex, setLastIndex] = useState(0);
+    const [displayTasks, setDisplayTasks] = useState([]);
+
+    useEffect(() => {
+        const filteredTasks = tasks.filter((task) => {
+            if (filter === 'done') return task.completed;
+            if (filter === 'undone') return !task.completed;
+            return true;
+        });
+
+        setDisplayTasks(filteredTasks);
+
+    }, [filter, tasks]);
 
     const handleAddTask = (e) => {
         e.preventDefault();
-        console.log(lastIndex);
-        
         if (newTask.trim() !== '') {
             setLastIndex(lastIndex + 1);
             setTasks([...tasks, { text: newTask, completed: false, index: lastIndex }]);
@@ -21,24 +32,15 @@ function ToDoList() {
     };
 
     const handleRemoveTask = (index) => {
-        console.log(index);
-        setTasks(tasks.filter((task) => task.index !== index ));
+        setTasks(tasks.filter((task) => task.index !== index));
     };
 
     const handleCompletedTask = (index) => {
         const updatedTasks = tasks.map((task) => (
-            (task.index === index) ? { ...task, completed: !task.completed } : task
+            task.index === index ? { ...task, completed: !task.completed } : task
         ));
-
         setTasks(updatedTasks);
-    }
-
-    const filteredTasks = tasks.filter((task, i) => {
-                            if (filter === 'done') return task.completed;
-                            if (filter === 'undone') return !task.completed;
-                            return true
-                        });
-    
+    };
 
     return (
         <div className="ToDoList">
@@ -50,41 +52,55 @@ function ToDoList() {
                         <span>All</span>
                     </label>
                     <label>
-                        <input type='radio' name='filter' onChange={() => setFilter('done')} checked={filter === 'done'}/>
+                        <input type='radio' name='filter' onChange={() => setFilter('done')} checked={filter === 'done'} />
                         <span>Completed</span>
                     </label>
                     <label>
-                        <input type='radio' name='filter' onChange={() => setFilter('undone')} checked={filter === 'undone'}/>
+                        <input type='radio' name='filter' onChange={() => setFilter('undone')} checked={filter === 'undone'} />
                         <span>Incomplete</span>
                     </label>
                 </form>
             </div>
             <ul className='tasks'>
-                {
-                    (filteredTasks.length === 0) ? (
-                        <p className='emptyMessage'>... There are no tasks ... </p> 
-                    ) : (
-                        filteredTasks.map((task, index) => (
-                            <li key={index}>
-                                <label>
-                                    <input type='checkbox' checked={task.completed} className="checkbox-round" value={task.text} onChange={() => handleCompletedTask(task.index)} />
-                                    { task.text }
-                                </label>
-    
-                                <button onClick={() => handleRemoveTask(task.index)}>&#10005;</button>
-                            </li>
-                        ))
-                    )
-                }
+                {displayTasks.length === 0 ? (
+                    <p className='emptyMessage'>... There are no tasks ... </p>
+                ) : (
+                    <TransitionGroup className="todo-list">
+                        {displayTasks.map((task) => (
+                            <CSSTransition
+                                key={task.index}
+                                timeout={500}
+                                classNames="item"
+                            >
+                                <li>
+                                    <label>
+                                        <input
+                                            type='checkbox'
+                                            checked={task.completed}
+                                            className="checkbox-round"
+                                            value={task.text}
+                                            onChange={() => handleCompletedTask(task.index)}
+                                        />
+                                        {task.text}
+                                    </label>
+                                    <button onClick={() => handleRemoveTask(task.index)}>&#10005;</button>
+                                </li>
+                            </CSSTransition>
+                        ))}
+                    </TransitionGroup>
+                )}
             </ul>
-            <form>
-                <input type="text" placeholder='Add a new task ...' value={newTask} onChange={(e) => setNewTask(e.target.value)}/>
-                <button onClick={handleAddTask}>Add</button>
+            <form onSubmit={handleAddTask}>
+                <input
+                    type="text"
+                    placeholder='Add a new task ...'
+                    value={newTask}
+                    onChange={(e) => setNewTask(e.target.value)}
+                />
+                <button type="submit">Add</button>
             </form>
         </div>
     );
-};
-
-
+}
 
 export default ToDoList;
